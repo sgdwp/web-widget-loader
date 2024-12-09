@@ -1,6 +1,11 @@
 (() => {
   const script = document.currentScript;
   console.log("Loader file loaded")
+    const hostname = window.location.hostname;
+  if (hostname) {
+    console.log("hostname", hostname);
+  }
+  
   // const URL = "https://ai-chatbot-2honfku3e-chin-weis-projects.vercel.app";
   const URL = "https://ai-chatbot-ajpxv3mti-chin-weis-projects.vercel.app";
   //   const URL = "http://localhost:3000";
