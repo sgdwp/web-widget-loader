@@ -38,7 +38,10 @@
     widget.appendChild(iframe);
 
     const greeting = script.getAttribute("data-greeting");
-
+    if (greeting) {
+      console.log("greeting", greeting);
+    }
+    
     const api = {
       sendMessage: (message) => {
         iframe.contentWindow.postMessage(
@@ -87,6 +90,10 @@
     });
 
     const license = script.getAttribute("data-license");
+    if (license) {
+      console.log("license", license);
+    }
+    
     // const widgetUrl = `http://localhost:3000?license=${license}`;
     const widgetUrl = `${URL}?license=${license}`;
     iframe.src = widgetUrl;
