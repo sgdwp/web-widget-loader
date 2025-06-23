@@ -16,8 +16,8 @@
     const widgetStyle = widget.style;
     widgetStyle.display = "none";
     widgetStyle.boxSizing = "border-box";
-    widgetStyle.width = "600px";
-    widgetStyle.height = "800px";
+    widgetStyle.width = "800px";
+    widgetStyle.height = "1000px";
     widgetStyle.position = "absolute";
     widgetStyle.bottom = "40px";
     widgetStyle.right = "40px";
@@ -35,7 +35,7 @@
     iframeStyle.border = 0;
     iframeStyle.margin = 0;
     iframeStyle.padding = 0;
-    iframeStyle.width = "600px"; //width
+    iframeStyle.width = "800px"; //width
 
     widget.appendChild(iframe);
 
