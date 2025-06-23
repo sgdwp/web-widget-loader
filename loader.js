@@ -24,20 +24,31 @@
     widgetStyle.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
     widgetStyle.borderRadius = "10px";
     widgetStyle.overflow = "hidden";       // Clip any overflowing iframe content
-    widgetStyle.backgroundColor = "#fff";  // Optional: prevent background gaps
+    widgetStyle.backgroundColor = "#000000";  // Optional: prevent background gaps
 
     const iframe = document.createElement("iframe");
 
     const iframeStyle = iframe.style;
+    // iframeStyle.boxSizing = "border-box";
+    // iframeStyle.position = "absolute";
+    // iframeStyle.top = "0";
+    // iframeStyle.left = "0";
+    // iframeStyle.width = "30%";
+    // iframeStyle.height = "100%";
+    // iframeStyle.border = "none";
+    // iframeStyle.margin = "0";
+    // iframeStyle.padding = "0";
     iframeStyle.boxSizing = "border-box";
     iframeStyle.position = "absolute";
-    iframeStyle.top = "0";
-    iframeStyle.left = "0";
-    iframeStyle.width = "30%";
+    iframeStyle.right = 0;
+    iframeStyle.top = 0;
+    iframeStyle.bottom = 10;
+    iframeStyle.width = "100%";
     iframeStyle.height = "100%";
-    iframeStyle.border = "none";
-    iframeStyle.margin = "0";
-    iframeStyle.padding = "0";
+    iframeStyle.border = 0;
+    iframeStyle.margin = 0;
+    iframeStyle.padding = 0;
+    iframeStyle.width = "600px"; //width
 
     widget.appendChild(iframe);
 
