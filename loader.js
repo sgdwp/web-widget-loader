@@ -8,7 +8,7 @@
   
   // const URL = "https://ai-chatbot-2honfku3e-chin-weis-projects.vercel.app";
   // const URL = "https://ai-chatbot-ajpxv3mti-chin-weis-projects.vercel.app";
-    const URL = "http://localhost:3000";
+    const URL = "http://localhost:3000/query";
   const loadWidget = () => {
     const widget = document.createElement("div");
 
