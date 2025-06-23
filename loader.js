@@ -13,27 +13,31 @@
     const widget = document.createElement("div");
 
     const widgetStyle = widget.style;
-    widgetStyle.display = "none";
     widgetStyle.boxSizing = "border-box";
-    widgetStyle.width = "400px";
-    widgetStyle.height = "747px";
-    widgetStyle.position = "absolute";
+    widgetStyle.width = "400px";           // Set fixed size, or change to % if you want responsiveness
+    widgetStyle.height = "600px";
+    widgetStyle.position = "fixed";        // Changed to 'fixed' to always float relative to viewport
     widgetStyle.bottom = "40px";
     widgetStyle.right = "40px";
+    widgetStyle.zIndex = "9999";           // Ensure it's above other content
+    widgetStyle.display = "none";          // Hidden by default
+    widgetStyle.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+    widgetStyle.borderRadius = "10px";
+    widgetStyle.overflow = "hidden";       // Clip any overflowing iframe content
+    widgetStyle.backgroundColor = "#fff";  // Optional: prevent background gaps
 
     const iframe = document.createElement("iframe");
 
     const iframeStyle = iframe.style;
-    iframeStyle.boxSizing = "borderBox";
+    iframeStyle.boxSizing = "border-box";
     iframeStyle.position = "absolute";
-    iframeStyle.right = 0;
-    iframeStyle.top = 0;
-    iframeStyle.width = "100%";
+    iframeStyle.top = "0";
+    iframeStyle.left = "0";
+    iframeStyle.width = "30%";
     iframeStyle.height = "100%";
-    iframeStyle.border = 0;
-    iframeStyle.margin = 0;
-    iframeStyle.padding = 0;
-    iframeStyle.width = "500px";
+    iframeStyle.border = "none";
+    iframeStyle.margin = "0";
+    iframeStyle.padding = "0";
 
     widget.appendChild(iframe);
 
