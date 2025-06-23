@@ -16,8 +16,8 @@
     const widgetStyle = widget.style;
     widgetStyle.display = "none";
     widgetStyle.boxSizing = "border-box";
-    widgetStyle.width = "400px";
-    widgetStyle.height = "747px";
+    widgetStyle.width = "600px";
+    widgetStyle.height = "800px";
     widgetStyle.position = "absolute";
     widgetStyle.bottom = "40px";
     widgetStyle.right = "40px";
