@@ -10,7 +10,8 @@
   // const URL = "https://ai-chatbot-ajpxv3mti-chin-weis-projects.vercel.app";
 
   // const URL = "https://sstabbgovtechomauatqatg.z23.web.core.windows.net/";
-  const URL = "http://localhost:3000/query";
+  const QUERYGOV_CHATBOT_URL = "http://localhost:3000/query";
+  const origin = new URL(QUERYGOV_CHATBOT_URL).origin;
   const loadWidget = () => {
     const widget = document.createElement("div");
 
@@ -20,8 +21,8 @@
     widgetStyle.width = "520px";
     widgetStyle.height = "580px";
     widgetStyle.position = "absolute";
-    widgetStyle.bottom = "55px";
-    widgetStyle.right = "40px";
+    widgetStyle.bottom = "110px";
+    widgetStyle.right = "44px";
     widgetStyle.backgroundColor = "#fff";
     widgetStyle.overflow = "hidden";
     widgetStyle.visibility = "hidden";
@@ -40,35 +41,84 @@
     iframeStyle.padding = 0;
     widget.appendChild(iframe);
 
-    const greeting = script.getAttribute("data-greeting");
+    // const license = script.getAttribute("data-license");
+    // const widgetUrl = `http://localhost:3000?license=${license}`;
+    // const widgetUrl = `${QUERYGOV_CHATBOT_URL}?license=${license}&hostname=${hostname}`;
+    const widgetUrl = `${QUERYGOV_CHATBOT_URL}?hostname=${hostname}`;
+    iframe.src = widgetUrl;
 
+    document.body.appendChild(widget);
+
+    // Create the toggle button
+    const toggleButton = document.createElement("button");
+    const buttonStyle = toggleButton.style;
+
+    buttonStyle.position = "absolute";
+    buttonStyle.bottom = "54px";
+    buttonStyle.right = "44px";
+    buttonStyle.padding = "16px 20px";
+    buttonStyle.backgroundImage =
+      "linear-gradient(to right, #491DB6, #5925DC, #7E55E4)";
+    buttonStyle.color = "#fff";
+    buttonStyle.border = "none";
+    buttonStyle.borderRadius = "5px";
+    buttonStyle.cursor = "pointer";
+    buttonStyle.fontWeight = "bold";
+    buttonStyle.width = "200px";
+    buttonStyle.boxShadow = "0 4px 10px rgba(73, 29, 182, 0.22)";
+    buttonStyle.backgroundColor = "rgba(73, 29, 182, 0.22)";
+    buttonStyle.display = "flex";
+    buttonStyle.alignItems = "center";
+    buttonStyle.justifyContent = "center";
+    buttonStyle.gap = "8px"; // space between icon and text
+
+    const icon = document.createElement("img");
+    // Set icon source to base64 data URI
+    icon.src =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEVSURBVHgB3VTdDYIwED4aEy1PjgCbOIIrOIE4gXEC4whO4AiO4AiygT7RQiInFyTQplApfeJLGkK5v+877gBmBymLc5blLyFy7DlP3SfLZNIXj+nBETEJAljDnxBCRIwFR3pajdvKa+OmaovPrbYr7mCvRg04lICKoKBd+aSkZCoTBg4gzRHZAwA33XtE2NJ9b0/GMmjlaQ4xGujFmAStTS0TyWP67iSRis+ukuaNWB6spi4MCENz4CXBEDxI1IKmXJ/0BUxAE4zzZfy7inSbSQlMAXV4lcgEIwPaSd2FN6XRRgZjtqkNPT0oY855Ch6gMKCJBM/QGOC1Emhf5aX/GRyRdl8UBmG4qtYwXlyZ1H7lCWaFL2+rIf/T1rVOAAAAAElFTkSuQmCC";
+    icon.alt = "icon";
+    icon.style.width = "20px";
+    icon.style.height = "20px";
+
+    const text = document.createTextNode("Ask a question");
+    toggleButton.appendChild(icon);
+    toggleButton.appendChild(text);
+
+    // Attach click event to toggle the widget
+    toggleButton.addEventListener("click", () => {
+      api.toggle();
+    });
+
+    // Append the button to the body
+    document.body.appendChild(toggleButton);
+
+    //event listener
     const api = {
       sendMessage: (message) => {
         iframe.contentWindow.postMessage(
           {
             sendMessage: message,
           },
-          URL
+          QUERYGOV_CHATBOT_URL
         );
       },
 
       show: () => {
-        // widget.style.display = "block";
-        widgetStyle.visibility = "visible";
+        widget.style.visibility = "visible";
       },
 
       hide: () => {
-        // widget.style.display = "none";
-        widgetStyle.visibility = "hidden";
+        widget.style.visibility = "hidden";
+        toggleButton.style.visibility = "visible";
       },
 
       toggle: () => {
-        // const display = window.getComputedStyle(widget, null).display;
-        // widget.style.display = display === "none" ? "block" : "none";
-
         const visibility = window.getComputedStyle(widget).visibility;
         widget.style.visibility =
           visibility === "hidden" ? "visible" : "hidden";
+        if (visibility === "hidden") {
+          toggleButton.style.visibility = "hidden";
+        }
       },
 
       onHide: () => {},
@@ -80,53 +130,27 @@
       });
 
       window.addEventListener("message", (evt) => {
-        if (evt.origin !== URL) {
+        if (evt.origin !== origin) {
           return;
         }
+        const { type } = evt.data;
 
-        if (evt.data === "hide") {
+        if (type === "INIT") {
+          // Maybe open chat automatically, etc.
+          iframe.contentWindow.postMessage(
+            { type: "HOSTNAME", payload: hostname },
+            QUERYGOV_CHATBOT_URL
+          );
+        }
+        if (type === "MINIMIZED_CHAT") {
           api.hide();
           api.onHide();
         }
       });
-
-      iframe.contentWindow.postMessage({ greeting }, URL);
-      // widgetStyle.display = "none";
+      // const greeting = script.getAttribute("data-greeting");
+      // iframe.contentWindow.postMessage({ greeting }, QUERYGOV_CHATBOT_URL);
       widgetStyle.visibility = "hidden";
     });
-
-    const license = script.getAttribute("data-license");
-    // const widgetUrl = `http://localhost:3000?license=${license}`;
-    const widgetUrl = `${URL}?license=${license}&hostname=${hostname}`;
-    iframe.src = widgetUrl;
-
-    document.body.appendChild(widget);
-
-    // Create the toggle button
-    const toggleButton = document.createElement("button");
-    toggleButton.textContent = "Ask a question";
-    const buttonStyle = toggleButton.style;
-
-    buttonStyle.position = "absolute";
-    buttonStyle.bottom = "8px";
-    buttonStyle.right = "40px";
-    buttonStyle.padding = "10px 20px";
-    buttonStyle.backgroundImage =
-      "linear-gradient(to right, #491DB6, #5925DC, #7E55E4)";
-    buttonStyle.color = "#fff";
-    buttonStyle.border = "none";
-    buttonStyle.borderRadius = "5px";
-    buttonStyle.cursor = "pointer";
-    buttonStyle.fontWeight = "bold";
-    buttonStyle.width = "180px";
-
-    // Attach click event to toggle the widget
-    toggleButton.addEventListener("click", () => {
-      api.toggle();
-    });
-
-    // Append the button to the body
-    document.body.appendChild(toggleButton);
   };
 
   if (document.readyState === "complete") {
