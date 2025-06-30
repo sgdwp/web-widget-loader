@@ -104,6 +104,12 @@
           QUERYGOV_CHATBOT_URL
         );
       },
+      showButton: () => {
+        toggleButton.style.display = "flex";
+      },
+      hideButton: () => {
+        toggleButton.style.display = "none";
+      },
 
       show: () => {
         widget.style.visibility = "visible";
@@ -160,7 +166,7 @@
           return;
         }
         const { type } = evt.data;
-
+        console.log("type", type);
         if (type === "INIT") {
           iframe.contentWindow.postMessage(
             { type: "HOSTNAME", payload: hostname },
@@ -173,6 +179,12 @@
         }
         if (type === "EXPAND_CHAT") {
           api.show();
+        }
+        if (type === "SHOW_BUTTON") {
+          api.showButton();
+        }
+        if (type === "HIDE_BUTTON") {
+          api.hideButton();
         }
       });
       // const greeting = script.getAttribute("data-greeting");
