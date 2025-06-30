@@ -1,5 +1,5 @@
 (() => {
-  const script = document.currentScript;
+  // const script = document.currentScript;
 
   const hostname = window.location.hostname;
   if (hostname) {
@@ -14,20 +14,21 @@
   const origin = new URL(QUERYGOV_CHATBOT_URL).origin;
   const loadWidget = () => {
     const widget = document.createElement("div");
-
     const widgetStyle = widget.style;
     widgetStyle.display = "block";
     widgetStyle.boxSizing = "border-box";
     widgetStyle.width = "520px";
     widgetStyle.height = "580px";
     widgetStyle.position = "absolute";
-    widgetStyle.bottom = "110px";
+    widgetStyle.bottom = "59px";
     widgetStyle.right = "44px";
     widgetStyle.backgroundColor = "#fff";
     widgetStyle.overflow = "hidden";
     widgetStyle.visibility = "hidden";
-    const iframe = document.createElement("iframe");
 
+    const iframe = document.createElement("iframe");
+    // Set the `allow` attribute for clipboard access
+    iframe.setAttribute("allow", "clipboard-write");
     const iframeStyle = iframe.style;
     iframeStyle.boxSizing = "border-box";
     iframeStyle.position = "absolute";
@@ -44,7 +45,8 @@
     // const license = script.getAttribute("data-license");
     // const widgetUrl = `http://localhost:3000?license=${license}`;
     // const widgetUrl = `${QUERYGOV_CHATBOT_URL}?license=${license}&hostname=${hostname}`;
-    const widgetUrl = `${QUERYGOV_CHATBOT_URL}?hostname=${hostname}`;
+    // const widgetUrl = `${QUERYGOV_CHATBOT_URL}?hostname=${hostname}`;
+    const widgetUrl = `${QUERYGOV_CHATBOT_URL}`;
     iframe.src = widgetUrl;
 
     document.body.appendChild(widget);
@@ -67,7 +69,7 @@
     buttonStyle.width = "200px";
     buttonStyle.boxShadow = "0 4px 10px rgba(73, 29, 182, 0.22)";
     buttonStyle.backgroundColor = "rgba(73, 29, 182, 0.22)";
-    buttonStyle.display = "flex";
+    buttonStyle.display = "none"; // flex
     buttonStyle.alignItems = "center";
     buttonStyle.justifyContent = "center";
     buttonStyle.gap = "8px"; // space between icon and text
@@ -105,11 +107,28 @@
 
       show: () => {
         widget.style.visibility = "visible";
+        toggleButton.style.display = "none";
+        toggleButton.style.visibility = "hidden";
+        iframe.contentWindow.postMessage(
+          {
+            type: "VISIBILITY",
+            payload: "visible",
+          },
+          QUERYGOV_CHATBOT_URL
+        );
       },
 
       hide: () => {
         widget.style.visibility = "hidden";
+        toggleButton.style.display = "flex";
         toggleButton.style.visibility = "visible";
+        iframe.contentWindow.postMessage(
+          {
+            type: "VISIBILITY",
+            payload: "hidden",
+          },
+          QUERYGOV_CHATBOT_URL
+        );
       },
 
       toggle: () => {
@@ -119,6 +138,13 @@
         if (visibility === "hidden") {
           toggleButton.style.visibility = "hidden";
         }
+        iframe.contentWindow.postMessage(
+          {
+            type: "VISIBILITY",
+            payload: visibility === "hidden" ? "visible" : "hidden",
+          },
+          QUERYGOV_CHATBOT_URL
+        );
       },
 
       onHide: () => {},
@@ -136,7 +162,6 @@
         const { type } = evt.data;
 
         if (type === "INIT") {
-          // Maybe open chat automatically, etc.
           iframe.contentWindow.postMessage(
             { type: "HOSTNAME", payload: hostname },
             QUERYGOV_CHATBOT_URL
@@ -145,6 +170,9 @@
         if (type === "MINIMIZED_CHAT") {
           api.hide();
           api.onHide();
+        }
+        if (type === "EXPAND_CHAT") {
+          api.show();
         }
       });
       // const greeting = script.getAttribute("data-greeting");
